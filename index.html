@@ -1,356 +1,396 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>MickeyDollars — No-Code Trading Bots</title>
-<meta name="description" content="MickeyDollars — build trading bots without coding. Powered by Deriv." />
-<style>
-:root {
-  --teal: #0ea5a4;
-  --bg: #f6fbfb;
-  --muted: #6b7280;
-  --ticker-bg: #061018;
-  font-family: "Inter", sans-serif;
-}
-body {
-  margin: 0;
-  background: var(--bg);
-  color: #0f172a;
-}
-
-/* === Responsive Helpers === */
-.container {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* === Ticker === */
-.ticker-wrap {
-  background: var(--ticker-bg);
-  color: #e6f6f9;
-  overflow: hidden;
-  box-shadow: 0 4px 24px rgba(2, 6, 23, 0.4);
-}
-.ticker {
-  display: flex;
-  gap: 20px;
-  white-space: nowrap;
-  animation: scroll 35s linear infinite;
-}
-.ticker:hover { animation-play-state: paused; }
-@keyframes scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.ticker-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 200px;
-  font-size: 14px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
-}
-.coin-logo {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  color: #fff;
-  font-size: 12px;
-}
-.coin-change {
-  margin-left: auto;
-  padding: 2px 6px;
-  border-radius: 5px;
-  font-size: 12px;
-}
-.up { background: rgba(16,185,129,0.12); color: #10b981; }
-.down { background: rgba(239,68,68,0.12); color: #ef4444; }
-
-/* === Header === */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 0;
-  flex-wrap: wrap;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.logo-mark {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--teal), #7dd3fc);
-  color: white;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-nav {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.btn {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  cursor: pointer;
-  font-weight: 600;
-}
-.btn-primary { background: var(--teal); color: white; }
-.btn-outline { border: 1px solid var(--teal); color: var(--teal); background: transparent; }
-.btn-ghost { background: transparent; color: #06202a; }
-
-/* === Hero === */
-.hero {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 40px;
-  padding: 40px 0;
-}
-.hero-text { flex: 1 1 400px; }
-.hero-text h1 { font-size: 40px; margin: 10px 0; }
-.hero-text p { color: var(--muted); font-size: 16px; line-height: 1.6; }
-.hero-buttons {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 20px;
-}
-.hero-img {
-  flex: 1 1 300px;
-  display: flex;
-  justify-content: center;
-}
-.hero-img .mock {
-  width: 100%;
-  max-width: 420px;
-  height: 220px;
-  border-radius: 12px;
-  background: linear-gradient(145deg, #ffffff, #e6fffb);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-}
-
-/* === Features === */
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 16px;
-  margin: 30px 0;
-}
-.feature {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
-  transition: transform .2s;
-}
-.feature:hover { transform: translateY(-5px); }
-.feature h3 { margin: 0; color: var(--teal); }
-.feature p { font-size: 14px; color: var(--muted); }
-
-/* === CTA === */
-.cta {
-  background: linear-gradient(135deg, #e6fffb, #ffffff);
-  border-radius: 12px;
-  padding: 30px;
-  text-align: center;
-}
-.cta h2 { margin: 0 0 10px; }
-.cta p { color: var(--muted); font-size: 15px; }
-.cta-buttons {
-  margin-top: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
-.powered {
-  margin-top: 14px;
-  font-size: 13px;
-  color: var(--muted);
-}
-.powered a { color: var(--teal); text-decoration: none; }
-
-/* === Footer === */
-footer {
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
-  padding: 30px 0;
-}
-
-/* === Video Modal === */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-.modal.open { display: flex; }
-.modal-box {
-  width: 90%;
-  max-width: 800px;
-  position: relative;
-  background: black;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.modal-close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  color: white;
-  font-size: 18px;
-  cursor: pointer;
-  border-radius: 5px;
-  padding: 4px 8px;
-}
-.modal iframe { width: 100%; height: 450px; }
-
-/* === Responsive === */
-@media (max-width: 768px) {
-  .hero-text h1 { font-size: 28px; }
-  .hero-img .mock { height: 160px; }
-  .modal iframe { height: 250px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MickeyDollars - Trading Platform</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+    </style>
 </head>
 <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-<!-- ===== TICKER ===== -->
-<div class="ticker-wrap">
-  <div class="container">
-    <div class="ticker" id="ticker"></div>
-  </div>
-</div>
+        // Lucide React Icons (inline SVG components)
+        const ArrowRight = ({ className, ...props }) => (
+            <svg className={className} {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+        );
 
-<!-- ===== HEADER ===== -->
-<div class="container">
-  <header>
-    <div class="logo">
-      <div class="logo-mark">MD</div>
-      <div>
-        <strong>MickeyDollars</strong><br>
-        <small style="color:var(--muted)">mickeydollars.com</small>
-      </div>
-    </div>
-    <nav>
-      <a class="btn btn-ghost" href="#features">Features</a>
-      <button class="btn btn-outline" onclick="window.open('https://www.exness.com','_blank')">Create Account</button>
-    </nav>
-  </header>
-</div>
+        const BarChart2 = ({ className, ...props }) => (
+            <svg className={className} {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+        );
 
-<!-- ===== HERO ===== -->
-<div class="container">
-  <section class="hero">
-    <div class="hero-text">
-      <h1>Build trading bots without coding.</h1>
-      <p>Automate your trading on Deriv — simple, smart, and powerful. Create strategies visually and deploy them instantly.</p>
-      <div class="hero-buttons">
-        <button class="btn btn-primary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Start Trading</button>
-        <button class="btn btn-outline" onclick="window.open('https://www.exness.com','_blank')">Create Account</button>
-        <button class="btn btn-ghost" onclick="openVideo()">Watch Demo</button>
-      </div>
-    </div>
-    <div class="hero-img"><div class="mock"></div></div>
-  </section>
-</div>
+        const Image = ({ className, ...props }) => (
+            <svg className={className} {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+        );
 
-<!-- ===== FEATURES ===== -->
-<div class="container" id="features">
-  <h2 style="text-align:center;">Features</h2>
-  <div class="features">
-    <div class="feature"><h3>Visual Builder</h3><p>Drag-and-drop strategy blocks to build bots effortlessly.</p></div>
-    <div class="feature"><h3>Pre-Built Bots</h3><p>Use ready-made bots optimized for Deriv trading.</p></div>
-    <div class="feature"><h3>Analytics</h3><p>Monitor live trades and performance metrics in real time.</p></div>
-    <div class="feature"><h3>Fast Execution</h3><p>Low latency and reliable trading infrastructure.</p></div>
-    <div class="feature"><h3>Wallet Integration</h3><p>Connect and manage wallets seamlessly (e.g. M-Pesa).</p></div>
-    <div class="feature"><h3>Free Strategies</h3><p>Access and share community-tested trading templates.</p></div>
-  </div>
-</div>
+        const TrendingUp = ({ className, ...props }) => (
+            <svg className={className} {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+        );
 
-<!-- ===== CTA ===== -->
-<div class="container">
-  <div class="cta">
-    <h2>Ready to Transform Your Trading?</h2>
-    <p>Join MickeyDollars today and experience the future of automated trading. No coding, just profit.</p>
-    <div class="cta-buttons">
-      <button class="btn btn-primary">Get Started Free</button>
-      <button class="btn btn-outline" onclick="window.open('https://www.exness.com','_blank')">Create Account</button>
-    </div>
-    <div class="powered">Powered by <a href="https://deriv.com" target="_blank">Deriv</a> — Built on Deriv’s robust trading infrastructure.</div>
-  </div>
-</div>
+        const Zap = ({ className, ...props }) => (
+            <svg className={className} {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+        );
 
-<footer>
-  © 2025 MickeyDollars — For demonstration purposes only.
-</footer>
+        const Link2 = ({ className, ...props }) => (
+            <svg className={className} {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+        );
 
-<!-- ===== MODAL VIDEO ===== -->
-<div class="modal" id="videoModal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeVideo()">✕</button>
-    <iframe id="demoVideo" src="" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-  </div>
-</div>
+        const PlayCircle = ({ className, fill, ...props }) => (
+            <svg className={className} {...props} width="24" height="24" viewBox="0 0 24 24" fill={fill || "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="10 8 16 12 10 16 10 8" fill={fill || "none"}></polygon>
+            </svg>
+        );
 
-<script>
-// ======= COIN TICKER =======
-const coins = [
-  {sym:'BTC',color:'#f7931a'},{sym:'ETH',color:'#627eea'},{sym:'USDT',color:'#26a17b'},
-  {sym:'BNB',color:'#f3ba2f'},{sym:'SOL',color:'#00ffa3'},{sym:'XRP',color:'#346aa9'},
-  {sym:'ADA',color:'#0033ad'},{sym:'DOGE',color:'#c2a633'},{sym:'TON',color:'#0aa0ff'},
-  {sym:'TRX',color:'#f51b00'},{sym:'LTC',color:'#bfbfbf'},{sym:'MATIC',color:'#8247e5'},
-  {sym:'AVAX',color:'#e84142'},{sym:'LINK',color:'#2a5ada'},{sym:'DOT',color:'#e6007a'},{sym:'SHIB',color:'#ff6b6b'}
-];
-const ticker = document.getElementById('ticker');
-function makeItem(c, change){
-  const up = change >= 0;
-  return `<div class="ticker-item">
-    <div class="coin-logo" style="background:${c.color}">${c.sym.slice(0,2)}</div>${c.sym}
-    <span class="coin-change ${up?'up':'down'}">${up?'+':''}${change.toFixed(2)}%</span>
-  </div>`;
-}
-function populate(){
-  let html=''; coins.forEach(c=>{const ch=(Math.random()*6-3);html+=makeItem(c,ch);});
-  ticker.innerHTML=html+html;
-}
-populate(); setInterval(populate,6000);
+        function MickeyDollarsClone() {
+            const [cryptoPrices, setCryptoPrices] = useState([
+                { name: 'Bitcoin', symbol: 'BTC', price: 105231.45, change: -0.70, changeAmount: -741.00 },
+                { name: 'Ethereum', symbol: 'ETH', price: 3565.32, change: -0.03, changeAmount: -1.10 },
+                { name: 'BTC to USDT', symbol: 'BTCUSDT', price: 105244.19, change: -0.72, changeAmount: -766.94 },
+                { name: 'Cardano', symbol: 'ADA', price: 1.05, change: 2.14, changeAmount: 0.022 },
+                { name: 'Solana', symbol: 'SOL', price: 245.78, change: -1.25, changeAmount: -3.11 },
+                { name: 'Ripple', symbol: 'XRP', price: 2.89, change: 0.85, changeAmount: 0.024 },
+                { name: 'Polkadot', symbol: 'DOT', price: 8.45, change: -0.45, changeAmount: -0.038 },
+                { name: 'Dogecoin', symbol: 'DOGE', price: 0.38, change: 3.42, changeAmount: 0.013 },
+                { name: 'Avalanche', symbol: 'AVAX', price: 42.15, change: 1.67, changeAmount: 0.69 },
+                { name: 'Polygon', symbol: 'MATIC', price: 1.12, change: -0.89, changeAmount: -0.010 },
+            ]);
 
-// ======= VIDEO MODAL =======
-const modal=document.getElementById('videoModal');
-const video=document.getElementById('demoVideo');
-function openVideo(){
-  modal.classList.add('open');
-  video.src="https://www.youtube.com/embed/lthEgaIY1uw?autoplay=1&modestbranding=1&rel=0";
-}
-function closeVideo(){
-  modal.classList.remove('open');
-  video.src="";
-}
-modal.addEventListener('click',e=>{if(e.target===modal)closeVideo();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVideo();});
-</script>
+            const [tickerPosition, setTickerPosition] = useState(0);
+
+            useEffect(() => {
+                const priceInterval = setInterval(() => {
+                    setCryptoPrices(prevPrices => 
+                        prevPrices.map(coin => {
+                            const fluctuation = (Math.random() - 0.5) * 0.02;
+                            const newPrice = coin.price * (1 + fluctuation);
+                            const priceChange = newPrice - coin.price;
+                            const percentChange = (priceChange / coin.price) * 100;
+                            
+                            return {
+                                ...coin,
+                                price: newPrice,
+                                changeAmount: coin.changeAmount + priceChange,
+                                change: coin.change + percentChange
+                            };
+                        })
+                    );
+                }, 2000);
+
+                return () => clearInterval(priceInterval);
+            }, []);
+
+            useEffect(() => {
+                const scrollInterval = setInterval(() => {
+                    setTickerPosition(prev => prev - 1);
+                }, 30);
+
+                return () => clearInterval(scrollInterval);
+            }, []);
+
+            const handleExnessRedirect = () => {
+                window.open('https://www.exness.com/', '_blank');
+            };
+
+            const handleDerivRedirect = () => {
+                window.open('https://www.deriv.com/', '_blank');
+            };
+
+            return (
+                <div className="min-h-screen bg-white">
+                    {/* Animated Crypto Ticker */}
+                    <div className="bg-white border-b border-gray-200 py-2 overflow-hidden">
+                        <div 
+                            className="flex items-center gap-8 text-sm whitespace-nowrap"
+                            style={{
+                                transform: `translateX(${tickerPosition}px)`,
+                                width: 'max-content'
+                            }}
+                        >
+                            {[...cryptoPrices, ...cryptoPrices, ...cryptoPrices].map((coin, index) => (
+                                <div key={index} className="flex items-center gap-2 px-4">
+                                    <span className="font-semibold text-gray-900">{coin.name}</span>
+                                    <span className="text-gray-600">{coin.price.toFixed(coin.price < 10 ? 4 : 2)}</span>
+                                    <span className={coin.change >= 0 ? 'text-green-600' : 'text-red-500'}>
+                                        {coin.changeAmount >= 0 ? '+' : ''}{coin.changeAmount.toFixed(coin.price < 10 ? 4 : 2)} 
+                                        ({coin.change >= 0 ? '+' : ''}{coin.change.toFixed(2)}%)
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Hero Section */}
+                    <section className="relative bg-gradient-to-br from-teal-700 via-teal-600 to-teal-800 text-white overflow-hidden">
+                        <div className="absolute inset-0 opacity-20">
+                            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                        <circle cx="20" cy="20" r="1" fill="white" opacity="0.3"/>
+                                        <line x1="20" y1="20" x2="40" y2="0" stroke="white" strokeWidth="0.5" opacity="0.2"/>
+                                        <line x1="20" y1="20" x2="40" y2="40" stroke="white" strokeWidth="0.5" opacity="0.2"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid)"/>
+                            </svg>
+                        </div>
+
+                        <div className="relative max-w-5xl mx-auto px-4 py-16 md:py-24 text-center">
+                            <div className="flex justify-center mb-6">
+                                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-yellow-200 to-yellow-400 flex items-center justify-center shadow-2xl border-4 border-yellow-300">
+                                    <div className="text-6xl font-bold text-teal-800">$</div>
+                                </div>
+                            </div>
+
+                            <div className="inline-flex items-center gap-2 bg-teal-800/50 backdrop-blur-sm border border-teal-400/30 rounded-full px-4 py-2 mb-6">
+                                <span className="text-red-400">🎉</span>
+                                <span className="text-sm font-medium">New Platform</span>
+                            </div>
+
+                            <h1 className="text-5xl md:text-6xl font-bold mb-4">MickeyDollars</h1>
+                            <p className="text-xl md:text-2xl mb-3 font-medium">Trading Platform</p>
+                            <p className="text-base md:text-lg text-teal-100 max-w-3xl mx-auto mb-12">
+                                Revolutionary no-code trading platform that empowers everyone to build, deploy, and profit from automated trading strategies.
+                            </p>
+
+                            <div className="grid grid-cols-3 gap-6 md:gap-12 max-w-2xl mx-auto mb-12">
+                                <div>
+                                    <div className="text-3xl md:text-4xl font-bold mb-1">10K+</div>
+                                    <div className="text-sm md:text-base text-teal-100">Active Users</div>
+                                </div>
+                                <div>
+                                    <div className="text-3xl md:text-4xl font-bold mb-1">$2M+</div>
+                                    <div className="text-sm md:text-base text-teal-100">Traded Volume</div>
+                                </div>
+                                <div>
+                                    <div className="text-3xl md:text-4xl font-bold mb-1">99.9%</div>
+                                    <div className="text-sm md:text-base text-teal-100">Uptime</div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                                <button 
+                                    onClick={handleExnessRedirect}
+                                    className="px-8 py-3 bg-gradient-to-r from-yellow-200 to-yellow-300 text-teal-900 font-semibold rounded-lg hover:from-yellow-300 hover:to-yellow-400 transition flex items-center gap-2 shadow-lg cursor-pointer"
+                                >
+                                    Start Trading <ArrowRight className="w-5 h-5" />
+                                </button>
+                                <button 
+                                    onClick={handleExnessRedirect}
+                                    className="px-8 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition flex items-center gap-2 cursor-pointer"
+                                >
+                                    <span className="mr-1">👤</span> Create Account
+                                </button>
+                                <button className="px-8 py-3 bg-teal-800/50 backdrop-blur-sm border border-teal-400/30 text-white font-semibold rounded-lg hover:bg-teal-800/70 transition flex items-center gap-2">
+                                    <PlayCircle className="w-5 h-5" /> Watch Demo
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Features Section */}
+                    <section className="py-20 px-4 bg-gray-50">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="text-center mb-16">
+                                <div className="inline-block bg-teal-700 text-white text-sm font-semibold px-6 py-2 rounded-full mb-6">
+                                    Features
+                                </div>
+                                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                                    Everything You Need to Succeed
+                                </h2>
+                                <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                                    Powerful tools and features designed to give you the edge in automated trading
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200 hover:shadow-md transition">
+                                    <div className="w-14 h-14 bg-teal-700 rounded-xl flex items-center justify-center mb-6">
+                                        <BarChart2 className="w-7 h-7 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-3">Visual Strategy Builder</h3>
+                                    <p className="text-gray-600 mb-4 leading-relaxed">
+                                        Create complex trading strategies using our intuitive drag-and-drop interface. No coding required.
+                                    </p>
+                                    <button className="text-teal-700 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                                        Learn more <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200 hover:shadow-md transition">
+                                    <div className="w-14 h-14 bg-teal-700 rounded-xl flex items-center justify-center mb-6">
+                                        <Image className="w-7 h-7 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-3">Pre-Built Bots</h3>
+                                    <p className="text-gray-600 mb-4 leading-relaxed">
+                                        Access our library of tested and optimized trading bots. Deploy instantly and start earning.
+                                    </p>
+                                    <button className="text-teal-700 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                                        Explore bots <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200 hover:shadow-md transition">
+                                    <div className="w-14 h-14 bg-teal-700 rounded-xl flex items-center justify-center mb-6">
+                                        <TrendingUp className="w-7 h-7 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-3">Real-Time Analytics</h3>
+                                    <p className="text-gray-600 mb-4 leading-relaxed">
+                                        Monitor your strategies with advanced analytics, performance metrics, and risk management tools.
+                                    </p>
+                                    <button className="text-teal-700 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                                        View analytics <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200 hover:shadow-md transition">
+                                    <div className="w-14 h-14 bg-teal-700 rounded-xl flex items-center justify-center mb-6">
+                                        <Zap className="w-7 h-7 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-3">Lightning Fast</h3>
+                                    <p className="text-gray-600 mb-4 leading-relaxed">
+                                        Ultra-fast execution with sub-millisecond latency. Perfect for high-frequency trading strategies.
+                                    </p>
+                                    <button className="text-teal-700 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                                        See performance <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200 hover:shadow-md transition">
+                                    <div className="w-14 h-14 bg-teal-700 rounded-xl flex items-center justify-center mb-6">
+                                        <Link2 className="w-7 h-7 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-3">Easy Integration</h3>
+                                    <p className="text-gray-600 mb-4 leading-relaxed">
+                                        Seamlessly connect with Deriv platform and other trading APIs. One-click deployment.
+                                    </p>
+                                    <button className="text-teal-700 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                                        Get started <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200 hover:shadow-md transition">
+                                    <div className="w-14 h-14 bg-teal-700 rounded-xl flex items-center justify-center mb-6">
+                                        <PlayCircle className="w-7 h-7 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-3">Free Strategies</h3>
+                                    <p className="text-gray-600 mb-4 leading-relaxed">
+                                        Browse our collection of proven strategies. Learn from successful traders and adapt to your needs.
+                                    </p>
+                                    <button className="text-teal-700 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                                        Browse strategies <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Video Demo Section */}
+                    <section className="py-20 px-4 bg-white">
+                        <div className="max-w-5xl mx-auto text-center">
+                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                                See MickeyDollars in Action
+                            </h2>
+                            <p className="text-lg text-gray-600 mb-12">
+                                Watch how easy it is to create and deploy your first trading bot
+                            </p>
+
+                            <div className="relative bg-gray-100 rounded-2xl overflow-hidden shadow-xl" style={{paddingBottom: '56.25%', height: 0}}>
+                                <iframe
+                                    className="absolute top-0 left-0 w-full h-full"
+                                    src="https://www.youtube.com/embed/lthEgaIY1uw"
+                                    title="Introduction to Deriv Bot"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Final CTA Section */}
+                    <section className="relative bg-gradient-to-br from-teal-700 via-teal-600 to-teal-800 text-white py-20 px-4">
+                        <div className="max-w-4xl mx-auto text-center">
+                            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                                Ready to Transform Your Trading?
+                            </h2>
+                            <p className="text-lg md:text-xl text-teal-100 mb-10">
+                                Join MickeyDollars today and experience the future of automated trading. No coding, just profit.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <button 
+                                    onClick={handleExnessRedirect}
+                                    className="px-10 py-4 bg-gradient-to-r from-yellow-200 to-yellow-300 text-teal-900 font-semibold rounded-lg hover:from-yellow-300 hover:to-yellow-400 transition flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+                                >
+                                    Get Started Free <ArrowRight className="w-5 h-5" />
+                                </button>
+                                <button 
+                                    onClick={handleExnessRedirect}
+                                    className="px-10 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition flex items-center justify-center gap-2 cursor-pointer"
+                                >
+                                    <span className="mr-1">👤</span> Create Account
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="bg-white py-12 px-4 border-t border-gray-200">
+                        <div className="max-w-6xl mx-auto text-center">
+                            <button 
+                                onClick={handleDerivRedirect}
+                                className="inline-block bg-red-500 text-white font-bold px-8 py-3 rounded-lg mb-4 hover:bg-red-600 transition cursor-pointer"
+                            >
+                                DERIV
+                            </button>
+                            <p className="text-gray-600 mb-2">
+                                Powered by <span className="text-red-500 font-semibold">Deriv</span>
+                            </p>
+                            <p className="text-gray-500 text-sm">
+                                Built on Deriv's robust trading infrastructure
+                            </p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<MickeyDollarsClone />, document.getElementById('root'));
+    </script>
 </body>
 </html>
